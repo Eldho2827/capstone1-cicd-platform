@@ -7,26 +7,24 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const db = mysql.createConnection({
+const db = mysql.createPool({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME
+  database: process.env.DB_NAME,
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0
 });
 
-db.connect((err) => {
-  if (err) {
-    console.error('DB connection failed:', err.message);
-    return;
-  }
-  console.log('Connected to MySQL');
-  db.query(`CREATE TABLE IF NOT EXISTS todos (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    task VARCHAR(255) NOT NULL,
-    completed BOOLEAN DEFAULT false
-  )`);
+db.query(`CREATE TABLE IF NOT EXISTS todos (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  task VARCHAR(255) NOT NULL,
+  completed BOOLEAN DEFAULT false
+)`, (err) => {
+  if (err) console.error('Table creation failed:', err.message);
+  else console.log('Connected to MySQL, todos table ready');
 });
-
 app.get('/api/health', (req, res) => res.json({ status: 'ok' }));
 
 app.get('/api/todos', (req, res) => {
