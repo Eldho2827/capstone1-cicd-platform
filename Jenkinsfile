@@ -52,5 +52,21 @@ pipeline {
                 """
             }
         }
+stage('Deploy to Kubernetes') {
+            steps {
+                sh """
+                    export KUBECONFIG=/var/lib/jenkins/.kube/config
+                    kubectl apply -f k8s/namespace.yaml
+                    kubectl apply -f k8s/mysql.yaml
+                    kubectl apply -f k8s/backend.yaml
+                    kubectl apply -f k8s/frontend.yaml
+                    kubectl apply -f k8s/ingress.yaml
+                    kubectl set image deployment/backend backend=${BACKEND_IMAGE}:${BUILD_NUMBER} -n capstone1
+                    kubectl set image deployment/frontend frontend=${FRONTEND_IMAGE}:${BUILD_NUMBER} -n capstone1
+                    kubectl rollout status deployment/backend -n capstone1
+                    kubectl rollout status deployment/frontend -n capstone1
+                """
+            }
+        }
     }
 }
