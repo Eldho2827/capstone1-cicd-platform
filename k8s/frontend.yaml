@@ -13,13 +13,21 @@ spec:
       labels:
         app: frontend
     spec:
+      automountServiceAccountToken: false
       imagePullSecrets:
         - name: ecr-secret
       containers:
         - name: frontend
-          image: 082846230300.dkr.ecr.ap-south-1.amazonaws.com/capstone1-frontend:3
+          image: 082846230300.dkr.ecr.ap-south-1.amazonaws.com/capstone1-frontend:6
           ports:
             - containerPort: 80
+          resources:
+            requests:
+              cpu: "50m"
+              memory: "64Mi"
+            limits:
+              cpu: "150m"
+              memory: "128Mi"
           readinessProbe:
             httpGet:
               path: /
