@@ -56,6 +56,12 @@ stage('Deploy to Kubernetes') {
             steps {
                 sh """
                     export KUBECONFIG=/var/lib/jenkins/.kube/config
+                    kubectl delete secret ecr-secret -n capstone1 --ignore-not-found
+                    kubectl create secret docker-registry ecr-secret \\
+                        --docker-server=${ECR_REGISTRY} \\
+                        --docker-username=AWS \\
+                        --docker-password=\$(aws ecr get-login-password --region ${AWS_REGION}) \\
+                        --namespace=capstone1
                     kubectl apply -f k8s/namespace.yaml
                     kubectl apply -f k8s/mysql.yaml
                     kubectl apply -f k8s/backend.yaml
