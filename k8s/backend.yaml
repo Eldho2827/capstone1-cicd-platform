@@ -33,13 +33,15 @@ spec:
           image: 082846230300.dkr.ecr.ap-south-1.amazonaws.com/capstone1-backend:6
           ports:
             - containerPort: 5000
-          resources:
+        resources:
             requests:
               cpu: "100m"
               memory: "128Mi"
+              ephemeral-storage: "256Mi"
             limits:
               cpu: "250m"
               memory: "256Mi"
+              ephemeral-storage: "512Mi"
           envFrom:
             - configMapRef:
                 name: backend-config
