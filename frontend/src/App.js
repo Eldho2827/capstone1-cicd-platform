@@ -53,14 +53,12 @@ function App() {
       <ul>
         {todos.map(t => (
           <li key={t.id} style={{ textDecoration: t.completed ? 'line-through' : 'none' }}>
-            <span
+            <button
   onClick={() => toggleTodo(t.id, t.completed)}
-  onKeyDown={(e) => e.key === 'Enter' && toggleTodo(t.id, t.completed)}
-  role="button"
-  tabIndex={0}
+  style={{ background: 'none', border: 'none', padding: 0, font: 'inherit', textDecoration: 'inherit', cursor: 'pointer' }}
 >
   {t.task}
-</span>
+</button>
             <button onClick={() => deleteTodo(t.id)}>Delete</button>
           </li>
         ))}
