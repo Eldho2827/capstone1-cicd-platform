@@ -21,7 +21,7 @@ spec:
           image: 082846230300.dkr.ecr.ap-south-1.amazonaws.com/capstone1-frontend:6
           ports:
             - containerPort: 80
-         resources:
+          resources:
             requests:
               cpu: "50m"
               memory: "64Mi"
